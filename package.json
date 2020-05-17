@@ -544,7 +544,9 @@
           "type": "string",
           "enum": [
             "mongo",
-            "mongosh"
+            "mongosh",
+            "docker",
+            "docker-exec"
           ],
           "enumDescriptions": [
             "Use the legacy mongo shell",

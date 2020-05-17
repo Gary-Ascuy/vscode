@@ -416,9 +416,12 @@ export default class MDBExtensionController implements vscode.Disposable {
       env: { MDB_CONNECTION_STRING: mdbConnectionString }
     });
     const shellCommand = vscode.workspace.getConfiguration('mdb').get('shell');
-    mongoDBShell.sendText(
-      `${shellCommand} $MDB_CONNECTION_STRING; unset MDB_CONNECTION_STRING`
-    );
+    const commnad = {
+      'docker': 'docker run -it --rm --net=host mongo:latest mongo', // creates new container for each execution
+      'docker-exec': 'docker exec -it db mongo' // should be created with --net=host & container name as db
+    }[shellCommand] || shellCommand
+    mongoDBShell.sendText(`${commnad} $MDB_CONNECTION_STRING;`);
+    mongoDBShell.sendText('unset MDB_CONNECTION_STRING');
     mongoDBShell.show();
 
     return Promise.resolve(true);
